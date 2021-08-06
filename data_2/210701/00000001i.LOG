@@ -1,0 +1,56 @@
+// Sony SIR-1000 data Log file
+// Warning:  Do not modify the contents of this file
+//
+VERSION       	3.2	
+DATA_FILE     	001i.BIN	
+BIT_FILE      	NONE	
+AUX1_FILE     	NONE	
+AUX2_FILE     	NONE	
+FORMAT        	0 INTEL-86	
+VOLUME_CH     	96000	
+FILE_INTVL_CH 	1.041667E-005 s	
+REMARKS       	Remarks.....	
+CHANNEL       	001, "Ch_001", Volt, *(2.034505e-004)+(0.000000e+000)	
+CHANNEL       	002, "Ch_002", Volt, *(2.034505e-004)+(0.000000e+000)	
+CHANNEL       	003, "Ch_003", Volt, *(2.034505e-004)+(0.000000e+000)	
+CHANNEL       	004, "Ch_004", Volt, *(2.034505e-004)+(0.000000e+000)	
+CHANNEL       	005, "Ch_005", Volt, *(2.034505e-004)+(0.000000e+000)	
+CHANNEL       	006, "Ch_006", Volt, *(2.034505e-004)+(0.000000e+000)	
+CHANNEL       	007, "Ch_007", Volt, *(2.034505e-004)+(0.000000e+000)	
+CHANNEL       	008, "Ch_008", Volt, *(2.034505e-004)+(0.000000e+000)	
+CHANNEL       	009, "Ch_009", Volt, *(2.034505e-004)+(0.000000e+000)	
+CHANNEL       	010, "Ch_010", Volt, *(2.034505e-004)+(0.000000e+000)	
+CHANNEL       	011, "Ch_011", Volt, *(2.034505e-004)+(0.000000e+000)	
+CHANNEL       	012, "Ch_012", Volt, *(2.034505e-004)+(0.000000e+000)	
+CHANNEL       	013, "Ch_013", Volt, *(2.034505e-004)+(0.000000e+000)	
+CHANNEL       	014, "Ch_014", Volt, *(2.034505e-004)+(0.000000e+000)	
+CHANNEL       	015, "Ch_015", Volt, *(2.034505e-004)+(0.000000e+000)	
+CHANNEL       	016, "Ch_016", Volt, *(2.034505e-004)+(0.000000e+000)	
+//
+// Info. at Data Copy
+//
+TAPE_BC_MODE  	16	
+TAPE_SRATE_CH 	96000 original-samples/s/channel	
+DECIMATION    	0	
+TAPE_SPEED    	1	
+ID            001i	
+DATE_TIME     	20170803 163211	
+CNT_ADDRESS   	0	
+MEMO          	SIR-1000W RECORDER                                                                              	
+TRIG_MODE     	1 ID	
+INPUT_RANGE   	CH_001, 5.00V	
+INPUT_RANGE   	CH_002, 5.00V	
+INPUT_RANGE   	CH_003, 10.00V	
+INPUT_RANGE   	CH_004, 5.00V	
+INPUT_RANGE   	CH_005, 5.00V	
+INPUT_RANGE   	CH_006, 5.00V	
+INPUT_RANGE   	CH_007, 5.00V	
+INPUT_RANGE   	CH_008, 5.00V	
+INPUT_RANGE   	CH_009, 5.00V	
+INPUT_RANGE   	CH_010, 5.00V	
+INPUT_RANGE   	CH_011, 5.00V	
+INPUT_RANGE   	CH_012, 5.00V	
+INPUT_RANGE   	CH_013, 5.00V	
+INPUT_RANGE   	CH_014, 5.00V	
+INPUT_RANGE   	CH_015, 5.00V	
+INPUT_RANGE   	CH_016, 5.00V	
