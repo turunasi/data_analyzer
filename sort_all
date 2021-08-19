@@ -1,0 +1,37 @@
+#!/bin/bash
+echo -e "sort all data"
+echo -e "input total number:"
+read NUM
+echo -e "total num is ${NUM}"
+echo -e "input initial data number(separated space):"
+declare -a INIT_NUM
+read -a INIT_NUM
+echo -e "initial data are ${INIT_NUM[*]}"
+echo -e "input input directory path:"
+read IN_PATH
+echo -e "input output directory path:"
+read OUT_PATH
+echo -e "total number: ${NUM}"
+echo -e "initial     : ${INIT_NUM[*]}"
+echo -e "input path  : ${IN_PATH}"
+echo -e "output path : ${OUT_PATH}"
+echo "Continue? [y/N] > "
+read answer
+if [ "${answer}" != "y" ]; then
+  echo "Aborted."
+  exit 1
+fi
+for i in {1..$NUM}
+do
+    echo -e "i : ${i}"
+    for j in "${INIT_NUM[@]}"
+    do
+        if [$i -eq $j]
+        then
+            echo -e "init : ${i}"
+            ./sort $i 1 $IN_PATH $OUT_PATH
+            break
+        fi
+    done
+    ./sort $i 0 $IN_PATH $OUT_PATH
+done

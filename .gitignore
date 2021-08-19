@@ -1,0 +1,4 @@
+*.dSYM
+*.o
+data
+data_2
