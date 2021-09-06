@@ -21,17 +21,15 @@ if [ "${answer}" != "y" ]; then
   echo "Aborted."
   exit 1
 fi
-for i in {1..$NUM}
+for i in $(seq 1 $NUM)
 do
-    echo -e "i : ${i}"
+    init_flg=0
     for j in "${INIT_NUM[@]}"
     do
-        if [$i -eq $j]
-        then
-            echo -e "init : ${i}"
-            ./sort $i 1 $IN_PATH $OUT_PATH
+        if [ $i = $j ]; then
+            init_flg=1
             break
         fi
     done
-    ./sort $i 0 $IN_PATH $OUT_PATH
+    ./sort $i $init_flg $IN_PATH $OUT_PATH
 done

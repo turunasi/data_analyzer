@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
 
     bool use_swap = (argc == 7); // スワップチャンネルが入力されているかどうか. 入力されていればスワップを使うと判定.
     int fn = atoi(argv[1]);
-    bool is_initial = (bool)argv[2];
+    bool is_initial = atoi(argv[2]) == 1 ? true : false;
     char *input_directory_path = argv[3];
     char *output_directory_path = argv[4];
 
@@ -52,17 +52,19 @@ int main(int argc, char *argv[]) {
     unsigned int data_u[CH_NUM];
     // 三項演算子を用いてデータ分割数をイニシャルかどうかで値を切り替える
     int devide = is_initial ? DEVIDE_INITIAL : DEVIDE_DATA;
+    
+    printf("devide : %d", devide);
 
-    char input_file_path[100];
-    char output_number_path[100];
-    char output_file_path[100];
-    char comment[100];
+    char input_file_path[200];
+    char output_number_path[200];
+    char output_file_path[200];
+    char comment[300];
 
     FILE *fp_in, *fp_out;
     struct stat buff;
 
     // インプットファイルのパスを作成
-    sprintf(input_file_path, "%s/%08di.DAT", input_directory_path, fn);
+    sprintf(input_file_path, "%s/%08d.DAT", input_directory_path, fn);
     if ((fp_in = fopen(input_file_path, "rb")) == NULL) { // インプットファイルが無かったら
         sprintf(comment, "%s is not found.\n", input_file_path);
         exit_with_error(comment);
@@ -88,12 +90,9 @@ int main(int argc, char *argv[]) {
     // イニシャルでないならファイルの行数をデータ分割数で割った商分ファイルを小分けする
     if (!is_initial) {
         i = 1;
-        while(1) {
-            if (feof(fp_in) != 0) break; // skip a file which contains nothing.
-            i++;
-        }
+        while ((c = fgetc(fp_in)) != EOF) i++;
         c = i/devide;
-        printf("devined into %d files.\n", c);
+        printf("%d columns, devined into %d files.\n", i, c);
     } else { // イニシャルなら入力データが短いので1こで十分
         c = 1;
     }
