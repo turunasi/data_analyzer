@@ -48,12 +48,10 @@ int main(int argc, char *argv[]) {
         ch_num2 = atoi(argv[6]) - 1;
     }
 
-    int i, j, k, c= 0;
+    int i, j, k, c = 0;
     unsigned int data_u[CH_NUM];
     // 三項演算子を用いてデータ分割数をイニシャルかどうかで値を切り替える
     int devide = is_initial ? DEVIDE_INITIAL : DEVIDE_DATA;
-    
-    printf("devide : %d", devide);
 
     char input_file_path[200];
     char output_number_path[200];
@@ -66,13 +64,13 @@ int main(int argc, char *argv[]) {
     // インプットファイルのパスを作成
     sprintf(input_file_path, "%s/%08d.DAT", input_directory_path, fn);
     if ((fp_in = fopen(input_file_path, "rb")) == NULL) { // インプットファイルが無かったら
-        sprintf(comment, "%s is not found.\n", input_file_path);
+        sprintf(comment, "%s が無いですよ！\n", input_file_path);
         exit_with_error(comment);
     } else if (feof(fp_in)){ // インプットファイルはあるけど中身が空だったら
-        sprintf(comment, "%s contains nothing.\n", input_file_path);
+        sprintf(comment, "%s はあるけど空ファイルですよ！\n", input_file_path);
         exit_with_error(comment);
     } else { // インプットファイルがちゃんとあったら
-        printf("found %s\n", input_file_path);
+        printf("%s を発見\n", input_file_path);
     }
 
     // イニシャルならフォルダ名にiをつける
@@ -82,19 +80,20 @@ int main(int argc, char *argv[]) {
         sprintf(output_number_path, "%s/%03d", output_directory_path, fn);
     }
     if (stat(output_number_path, &buff) != 0) { // フォルダが無かったら作成
-        sprintf(comment, "%s is not exist. make directory.\n", output_number_path);
+        sprintf(comment, "%s が無かったので作成します。\n", output_number_path);
         print_warning(comment);
         mkdir_r_777(output_number_path);
     }
 
     // イニシャルでないならファイルの行数をデータ分割数で割った商分ファイルを小分けする
     if (!is_initial) {
-        i = 1;
-        while ((c = fgetc(fp_in)) != EOF) i++;
-        c = i/devide;
-        printf("%d columns, devined into %d files.\n", i, c);
+        i = 0;
+        while (fgetc(fp_in) != EOF) i++;                                                      //データがあるだけ処理する.ファイルを読み込む.
+        c = ceil(i/32/devide); // 何故か32で割らないとC++と数が合わない... 
+        printf("データファイル行数は%dでした。%d個のファイルに分割します。\n", i/32, c);
     } else { // イニシャルなら入力データが短いので1こで十分
         c = 1;
+        printf("イニシャルのデータなので1ファイルのみ出力します。\n");
     }
 
     for (i = 0; i < c; i++) {
@@ -105,7 +104,7 @@ int main(int argc, char *argv[]) {
             sprintf(output_file_path, "%s/%08d.dat", output_number_path, i + 1);
         }
         if ((fp_out = fopen(output_file_path, "wb")) == NULL) { // 保存ファイルが開けなかったら
-            sprintf(comment, "failed to make %s.\n", output_file_path);
+            sprintf(comment, "出力ファイルの生成に失敗しました...\n");
             exit_with_error(comment);
         }
         // データ抽出
@@ -121,16 +120,15 @@ int main(int argc, char *argv[]) {
                 fwrite(&data_u[k], 2, 1, fp_out);
             }
         }
-        sprintf(comment, "%s was made successfully.\n", output_file_path);
+        sprintf(comment, "%s が無事生成されました！\n", output_file_path);
         print_success(comment);
         fclose(fp_out);
     }
 
     fclose(fp_in);
 
-    make_data_logger_log(fn, output_number_path);
-    sprintf(comment, "complete data %d.\n", fn);
+    // データロガーの仕様についてログを吐きたいならコメントアウトを消して下さい(多分要らん)
+    // make_data_logger_log(fn, output_directory_path);
+    sprintf(comment, "%d番目のレコードの分割に生成しました！\n", fn);
     exit_with_success(comment);
 }
-
-

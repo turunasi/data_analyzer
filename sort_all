@@ -1,24 +1,24 @@
 #!/bin/bash
-echo -e "sort all data"
-echo -e "input total number:"
+echo -e "データロガーで取得したレコードを分割します"
+echo "レコード総数を入力 :"
 read NUM
-echo -e "total num is ${NUM}"
-echo -e "input initial data number(separated space):"
+echo "イニシャルデータの番号を入力(空白区切り):"
 declare -a INIT_NUM
 read -a INIT_NUM
-echo -e "initial data are ${INIT_NUM[*]}"
-echo -e "input input directory path:"
+echo "データが入っているフォルダのパスを入力 :"
 read IN_PATH
-echo -e "input output directory path:"
+echo "出力先のフォルダのパスを入力 :"
 read OUT_PATH
-echo -e "total number: ${NUM}"
-echo -e "initial     : ${INIT_NUM[*]}"
-echo -e "input path  : ${IN_PATH}"
-echo -e "output path : ${OUT_PATH}"
-echo "Continue? [y/N] > "
+echo -e "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+echo -e "\t総数       : ${NUM}"
+echo -e "\tイニシャル  : ${INIT_NUM[*]}"
+echo -e "\t入力先     : ${IN_PATH}"
+echo -e "\t出力先     : ${OUT_PATH}"
+echo -e "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+echo "以上でよろしいですか？ [y/N] : "
 read answer
 if [ "${answer}" != "y" ]; then
-  echo "Aborted."
+  printf "\033[31m%s\033[m\n" "中止します..."
   exit 1
 fi
 for i in $(seq 1 $NUM)
@@ -32,4 +32,6 @@ do
         fi
     done
     ./sort $i $init_flg $IN_PATH $OUT_PATH
+    echo -e ""
 done
+printf '\033[33m%s\033[m\n' '全レコードの分割に成功しました！'
