@@ -99,9 +99,9 @@ int main(int argc, char *argv[]) {
     for (i = 0; i < c; i++) {
         // イニシャルなら保存ファイル名にiをつける
         if (is_initial) {
-            sprintf(output_file_path, "%s/%08di.dat", output_number_path, i + 1);
+            sprintf(output_file_path, "%s/%08di.DAT", output_number_path, i + 1);
         } else {
-            sprintf(output_file_path, "%s/%08d.dat", output_number_path, i + 1);
+            sprintf(output_file_path, "%s/%08d.DAT", output_number_path, i + 1);
         }
         if ((fp_out = fopen(output_file_path, "wb")) == NULL) { // 保存ファイルが開けなかったら
             sprintf(comment, "出力ファイルの生成に失敗しました...\n");

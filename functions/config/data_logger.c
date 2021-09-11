@@ -1,3 +1,9 @@
+/**
+ * @file data_logger.c
+ * @author Yuki NISHII (turunasi@ruri.waseda.jp)
+ * @brief データロガーに関する関数を纏めたファイル
+ * @date 2021-09-11
+ */
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -5,7 +11,7 @@ void make_data_logger_log(int fn, char* directory_path) {
     char log_path[100];
     FILE *fp_log;
 
-    sprintf(log_path, "%s/%08di.log", directory_path, fn);  // output log path
+    sprintf(log_path, "%s/%08di.LOG", directory_path, fn);  // output log path
     if ((fp_log = fopen(log_path, "w")) == NULL) {
         printf("\x1b[31m");
         printf("failed to make %s.\n", log_path);
