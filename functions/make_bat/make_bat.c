@@ -19,25 +19,37 @@
 #define INIT_EXE_PATH "C:/Users/small/Desktop/data_analyzer/bin/make_data.exe"
 #define EXE_PATH "C:/Users/small/Desktop/data_analyzer/bin/make_data.exe"
 
+/**
+ * @param argc コマンド化した時の引数の総数(コマンド自体も含める)
+ * @param argv 引数の具体的な値が格納された配列
+ * 
+ * @param argv[0] コマンド名 使うことはない
+ * @param argv[1] データナンバー
+ * @param argv[2] 実験開始時initial
+ * @param argv[3] 実験終了時initial
+ * @param argv[4] 分割後データを取り込む開始ID
+ * @param argv[5] 分割後データを取り込む終了ID
+ * @param argv[4] 入力データが格納されたパス 2021-8-7ではdata/210807
+ * @param argv[5] 出力データが格納されたパス 2021-8-7ではsorted_data/210807
+ * @param argv[5] スワップチャンネル数1 データロガーのチャンネルを間違えた場合に交換するCH
+ * @param argv[6] スワップチャンネル数2 データロガーのチャンネルを間違えた場合に交換するCH
+ */
 int main(int argc, char *argv[]) {
 
     int id = atoi(argv[1]);
-    int before_init = atoi(argv[3]);
-    int after_init = atoi(argv[4]);
-    int start_file_id = atoi(argv[5]);
-    int end_file_id = atoi(argv[6]);
-    char *input_directory_path = argv[7];
-    char *result_directory_path = argv[8];
-    char *bat_directory_path = argv[9];
-    char *initial_directory_path = argv[10];
-    double before_P = atof(argv[11]);
-    double after_P = atof(argv[12]);
-    double before_T = atof(argv[13]);
-    double after_T = atof(argv[14]);
-    double Nrev = atof(argv[15]);
-
-    // char *posit_out = POSIT_OUT;
-    // char *posit_out_2 = POSIT_OUT_2;
+    int before_init = atoi(argv[2]);
+    int after_init = atoi(argv[3]);
+    int start_file_id = atoi(argv[4]);
+    int end_file_id = atoi(argv[5]);
+    char *input_directory_path = argv[6];
+    char *result_directory_path = argv[7];
+    char *bat_directory_path = argv[8];
+    char *initial_directory_path = argv[9];
+    double before_P = atof(argv[10]);
+    double after_P = atof(argv[11]);
+    double before_T = atof(argv[12]);
+    double after_T = atof(argv[13]);
+    double Nrev = atof(argv[14]);
 
     char result_file_path[200];
     char bat_file_path[200];
@@ -45,39 +57,6 @@ int main(int argc, char *argv[]) {
 
     FILE *fp_out;
     struct stat buff;
-
-    // printf("データフォルダ名(ex  181019_1)\n");  //日付はここで入れてる//
-    // scanf("%s", &posint_name_ID);
-
-    // printf("開始ID:\n");
-    // scanf("%d", &start_id);
-    // printf("終了ID:\n");
-    // scanf("%d", &end_id);
-
-    // printf("計算開始ファイル番号:\n");
-    // scanf("%d", &start_file_id);
-    // printf("終了ファイル番号:\n");
-    // scanf("%d", &end_file_id);
-
-    // printf("イニシャルNo１:\n");
-    // scanf("%d", &before_init);
-    // printf("イニシャルNo2:\n");
-    // scanf("%d", &after_init);
-
-    // printf("開始大気圧:\n");
-    // scanf("%lf", &before_P);
-    // printf("終了大気圧:\n");
-    // scanf("%lf", &after_P);
-        
-    // printf("開始温度:\n");
-    // scanf("%lf", &before_T);
-    // printf("終了温度:\n");
-    // scanf("%lf", &after_T);
-
-    // printf("回転数:\n");
-    // scanf("%lf", &Nrev);
-
-    // printf("%s\n", posint_name_ID);
 
     if (stat(input_directory_path, &buff) != 0) { // 入力データが無かったらエラー
         sprintf(comment, "%s がありません！パスの指定を間違っていませんか？\n", input_directory_path);
