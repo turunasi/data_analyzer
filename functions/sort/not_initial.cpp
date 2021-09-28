@@ -9,15 +9,17 @@
 #include<string.h>
 #include<direct.h>
 
-#define POSIT_IN  "F:/Axial21/21data/DAT/210701"  // input
-#define POSIT_OUT "F:/Axial21/21data/DAT2/210701" // output
+// #define POSIT_IN  "F:/Axial21/21data/DAT/210701"  // input
+// #define POSIT_OUT "F:/Axial21/21data/DAT2/210701" // output
+#define POSIT_IN "../data/210701"    //読み込むファイルのパス
+#define POSIT_OUT "../data_2/210701"        //出力先
 
 #define T_STANDBY 0.0 // 立ち上がりまでの秒数
 #define FS 96000
 #define DEVIDE 1050000 // 分割データ数
 
 #define START 2 // ファイル開始No
-#define END 22  // ファイル終了No
+#define END 10  // ファイル終了No
 
 //*******************************************************************************************************
 

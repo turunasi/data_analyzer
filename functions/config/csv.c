@@ -8,56 +8,37 @@
 #include "csv.h"
 #include "../utill.h" // よく使う関数を纏めた自作ヘッダ
 
-int get_row_num(char* csv_file_path) {
-    int i = 0;
-    int c = 0;
+double get_csv_value(char* csv_file_path, double csv_data[TOTAL_ROW_NUM][TOTAL_COL_NUM]) {
+    int No;
     char comment[300];
-    char* col;
-    FILE *fp;
-
-    if ((fp = fopen(csv_file_path, "r")) == NULL) { // CSVが無かったら
-        sprintf(comment, "%s が無いですよ！\n", csv_file_path);
-        print_error(comment);
-        return -1;
-    }
-    while (fgetc(fp) != EOF) i++;
-    return i;
-}
-
-void get_csv_value(char* csv_file_path, double csv_data[][TOTAL_COL_NUM]) {
-    int i = 0;
-    int id, col;
-    int row_num = get_row_num(csv_file_path);
-    if (row_num == -1) return;
-    char comment[300];
-    char* row;
+    char row[1000];
     char* str; 
     FILE *fp;
 
     if ((fp = fopen(csv_file_path, "r")) == NULL) { // CSVが無かったら
         sprintf(comment, "%s が無いですよ！\n", csv_file_path);
         print_error(comment);
-        return;
+        return -1.0;
     }
 
-    while ((row = fgetc(fp) ) != EOF) {
-        // 1列目(id)
+    for (int i = HEADER_ROW; i < TOTAL_ROW_NUM; i++) {
+        fgets(row, sizeof(row), fp);
+        if (i == HEADER_ROW) continue; // ヘッダ行は無視
+        // 1列目(No)
         str = strtok(row, ",");
-        id = atoi(str)-HEADER_ROW;
-        col = 0;
+        No = atoi(str) - 1; // idは1始まりだが配列は0始まりであるため
+        if (No == 0) break; // id未定義ならCSVを全て読み切ったと判断
         // 2列目以降
-        while((str = strtok(NULL, ",")) != NULL) {
-            // 元CSVからレコードID列分引く&配列に入れるので-2
-            switch (col - 2) {
+        for (int j = 0; j < TOTAL_COL_NUM; j++) {
+            switch (j + 1) {
             case SKIP_COL:
             case INITIAL_COL:
-                csv_data[id][col] = str == "Y" ? 1.0 : 0.0;
+                csv_data[i][j] = str == "Y" ? 1.0 : 0.0;
                 break;
             default:
-                csv_data[id][col] = atof(str);
+                csv_data[i][j] = atof(str);
                 break;
             }
-            col++;
         }
     }
 }
