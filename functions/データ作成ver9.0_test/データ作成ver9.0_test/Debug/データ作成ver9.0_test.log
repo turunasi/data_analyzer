@@ -1,0 +1,36 @@
+﻿2018/09/11 17:51:18 にビルドを開始しました。
+     1>ノード 2 上のプロジェクト "E:\Axial18\データ作成プログラム\データ作成ver9.0_test\データ作成ver9.0_test\データ作成ver9.0_test.vcxproj" (build ターゲット)。
+     1>InitializeBuildStatus:
+         "AlwaysCreate" が指定されたため "Debug\データ作成ver9.0_test.unsuccessfulbuild" を作成しています。
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt "ファイル操作関数.cpp" "メイン.CPP"
+         メイン.CPP
+         ファイル操作関数.cpp
+     1>e:\axial18\データ作成プログラム\データ作成ver9.0_test\データ作成ver9.0_test\ファイル操作関数.cpp(792): warning C4244: '引数' : 'time_t' から 'unsigned int' への変換です。データが失われる可能性があります。
+         コードを生成中...
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\Axial18\データ作成プログラム\データ作成ver9.0_test\Debug\データ作成ver9.0_test.exe" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\データ作成ver9.0_test.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"E:\Axial18\データ作成プログラム\データ作成ver9.0_test\Debug\データ作成ver9.0_test.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\Axial18\データ作成プログラム\データ作成ver9.0_test\Debug\データ作成ver9.0_test.lib" /MACHINE:X86 "Debug\FFT関数.obj"
+         "Debug\おまじない関数.obj"
+         "Debug\その他関数.obj"
+         "Debug\コマンドライン引数を変数に代入する関数.obj"
+         "Debug\バイナリ-電圧値変換関数.obj"
+         "Debug\ファイル入出力関数.obj"
+         "Debug\ファイル操作関数.obj"
+         "Debug\メイン.obj"
+         "Debug\メモリ操作関数.obj"
+         "Debug\単位換算関数.obj"
+         "Debug\各値計算関数.obj"
+         "Debug\数値確認関数.obj"
+         "Debug\行数計算関数.obj"
+         LINK : 前回のインクリメンタル リンクで E:\Axial18\データ作成プログラム\データ作成ver9.0_test\Debug\データ作成ver9.0_test.exe が見つからなかったか、ビルドされませんでした。フル リンクを行います。
+         データ作成ver9.0_test.vcxproj -> E:\Axial18\データ作成プログラム\データ作成ver9.0_test\Debug\データ作成ver9.0_test.exe
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"E:\Axial18\データ作成プログラム\データ作成ver9.0_test\Debug\データ作成ver9.0_test.exe;#1" /manifest "Debug\データ作成ver9.0_test.exe.intermediate.manifest"
+       FinalizeBuildStatus:
+         ファイル "Debug\データ作成ver9.0_test.unsuccessfulbuild" を削除しています。
+         "Debug\データ作成ver9.0_test.lastbuildstate" のタッチ タスクを実行しています。
+     1>プロジェクト "E:\Axial18\データ作成プログラム\データ作成ver9.0_test\データ作成ver9.0_test\データ作成ver9.0_test.vcxproj" (build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:02.10

@@ -1,0 +1,35 @@
+﻿2018/09/11 17:48:48 にビルドを開始しました。
+     1>ノード 2 上のプロジェクト "E:\Axial18\データ作成プログラム\イニシャルver1.4\イニシャルver1.4\イニシャルver1.4.vcxproj" (build ターゲット)。
+     1>PrepareForBuild:
+         ディレクトリ "E:\Axial18\データ作成プログラム\イニシャルver1.4\Debug\" を作成しています。
+       InitializeBuildStatus:
+         "AlwaysCreate" が指定されたため "Debug\イニシャルver1.4.unsuccessfulbuild" を作成しています。
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt "イニシャル_おまじない関数.cpp" "イニシャル_イニシャル計算関数.cpp" "イニシャル_バイナリ-電圧値変換関数.cpp" "イニシャル_ファイル入出力関数.cpp" "イニシャル_ファイル操作関数.cpp" "イニシャル_メイン.CPP" "イニシャル_メモリ操作関数.cpp"
+         イニシャル_メモリ操作関数.cpp
+         イニシャル_メイン.CPP
+         イニシャル_ファイル操作関数.cpp
+         イニシャル_ファイル入出力関数.cpp
+         イニシャル_バイナリ-電圧値変換関数.cpp
+         イニシャル_イニシャル計算関数.cpp
+         イニシャル_おまじない関数.cpp
+         コードを生成中...
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\Axial18\データ作成プログラム\イニシャルver1.4\Debug\イニシャルver1.4.exe" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\イニシャルver1.4.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"E:\Axial18\データ作成プログラム\イニシャルver1.4\Debug\イニシャルver1.4.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\Axial18\データ作成プログラム\イニシャルver1.4\Debug\イニシャルver1.4.lib" /MACHINE:X86 "Debug\イニシャル_おまじない関数.obj"
+         "Debug\イニシャル_イニシャル計算関数.obj"
+         "Debug\イニシャル_バイナリ-電圧値変換関数.obj"
+         "Debug\イニシャル_ファイル入出力関数.obj"
+         "Debug\イニシャル_ファイル操作関数.obj"
+         "Debug\イニシャル_メイン.obj"
+         "Debug\イニシャル_メモリ操作関数.obj"
+         イニシャルver1.4.vcxproj -> E:\Axial18\データ作成プログラム\イニシャルver1.4\Debug\イニシャルver1.4.exe
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"E:\Axial18\データ作成プログラム\イニシャルver1.4\Debug\イニシャルver1.4.exe;#1" /manifest "Debug\イニシャルver1.4.exe.intermediate.manifest"
+       FinalizeBuildStatus:
+         ファイル "Debug\イニシャルver1.4.unsuccessfulbuild" を削除しています。
+         "Debug\イニシャルver1.4.lastbuildstate" のタッチ タスクを実行しています。
+     1>プロジェクト "E:\Axial18\データ作成プログラム\イニシャルver1.4\イニシャルver1.4\イニシャルver1.4.vcxproj" (build ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:01.11

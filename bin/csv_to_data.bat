@@ -1,6 +1,6 @@
-@echo off
+@echo on
+setlocal EnableDelayedExpansion
 cd /d %~dp0
-setlocal enabledelayedexpansion
 
 set DEFAULT_DATA_DIRECTORY=DAT
 set DEFAULT_SORTED_DATA_DIRECTORY=DAT2
@@ -8,41 +8,49 @@ set DEFAULT_INITIAL_DIRECTORY=initial
 set DEFAULT_RESULT_DIRECTORY=result
 set DEFAULT_BATCH_DIRECTORY=bat
 
-int csv_row_num;
-int ch_num1, ch_num2;
-
-set /a row=0
-set /a is_initial=
-set /a is_record=
-set /a under_experiment=
-set /a before_P=
-set /a before_T=
-set /a before_init_record_id=
-set /a Nrev=
-
-char comment[300];
-
-FILE *fp_csv;
-struct stat buff;
-
-set /p csv_file_path="CSVãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ : "
+echo "CSVƒtƒ@ƒCƒ‹‚ğExcell‚ÅŠJ‚¢‚½‚Ü‚Ü‚É‚·‚é‚Æ“Ç‚İ‚Ü‚ê‚Ü‚¹‚ñB‚¤‚ñ‚¿!!"
+set /p csv_file_path="CSVƒtƒ@ƒCƒ‹‚ÌƒpƒX‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢ : "
 if not exist %csv_file_path% (
-    echo "CSVãƒ‡ãƒ¼ã‚¿ã®å–å¾—ã«å¤±æ•—ã—ã¾ã—ãŸ...\n"
+    echo CSVƒf[ƒ^‚Ìæ“¾‚É¸”s‚µ‚Ü‚µ‚½B
+    pause
     exit
 )
+echo CSVƒf[ƒ^‚ğ”­Œ©‚µ‚Ü‚µ‚½B
+echo CSVƒf[ƒ^‚ğ“Ç‚İ‚İ‚Ü‚·B
+rem CSVƒtƒ@ƒCƒ‹‚Ìƒf[ƒ^‚ğ“ñŸŒ³”z—ñ‚ÉŠi”[
+set /a total_row_num=0
+for /f "skip=1 delims=, tokens=1-7" %%a in (%csv_file_path%) do (
+    rem N[Hz]‚ª‹ó‚É‚È‚Á‚½‚Æ‚±‚ë‚ğCSV‚ÌI’[‚Æ‚·‚é
+    if "%%g" == "" goto :exit_csv
+    set CSV_DATA[!total_row_num!][0]=%%a
+    set CSV_DATA[!total_row_num!][1]=%%b
+    set CSV_DATA[!total_row_num!][2]=%%c
+    set CSV_DATA[!total_row_num!][3]=%%d
+    set CSV_DATA[!total_row_num!][4]=%%e
+    set CSV_DATA[!total_row_num!][5]=%%f
+    set CSV_DATA[!total_row_num!][6]=%%g
+    set /a total_row_num+=1
+)
+:exit_csv
+set /a total_row_num-=1
 
-set /p home_directory_path="ãƒ‡ãƒ¼ã‚¿ãŒçºã‚ã‚‰ã‚Œã¦ã„ã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ãƒ‘ã‚¹ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ ex) 21Axial/21data : "
+set /p home_directory_path="ƒf[ƒ^‚ª“Z‚ß‚ç‚ê‚Ä‚¢‚éƒfƒBƒŒƒNƒgƒŠ‚ÌƒpƒX‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢ ex) 21Axial/21data : "
 if not exist %home_directory_path% (
-    echo "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å–å¾—ã«å¤±æ•—ã—ã¾ã—ãŸ...\n"
+    echo "ƒfƒBƒŒƒNƒgƒŠ‚Ìæ“¾‚É¸”s‚µ‚Ü‚µ‚½...\n"
+    pause
     exit
 )
 
-set \p date_name="ãƒ‡ãƒ¼ã‚¿å–å¾—æ—¥ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ ex) 210915 : "
+set /p date_name="ƒf[ƒ^æ“¾“ú‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢ ex) 210915 : "
 
 :loop_initial
-    set \p make_initial="ã‚¤ãƒ‹ã‚·ãƒ£ãƒ«ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆã™ã‚‹å ´åˆã¯1ã‚’ã€ä½œæˆã—ãªã„ãªã‚‰ã°0ã‚’æŒ‡å®šã—ã¦ãã ã•ã„ : "
+    set /p make_initial="ƒCƒjƒVƒƒƒ‹ƒtƒ@ƒCƒ‹‚ğì¬‚·‚éê‡1‚ğAì¬‚µ‚È‚¯‚ê‚Î0‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢ : "
     if not %make_initial% == 1 (
-        if not %make_initial% == 0 echo "ã‚¤ãƒ‹ã‚·ãƒ£ãƒ«ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆã™ã‚‹å ´åˆã¯1ã‚’ã€ä½œæˆã—ãªã„ãªã‚‰ã°0ã‚’æŒ‡å®šã—ã¦ãã ã•ã„ã€‚\n"
+        if not %make_initial% == 0 (
+            echo "ƒCƒjƒVƒƒƒ‹ƒtƒ@ƒCƒ‹‚ğì¬‚·‚éê‡1‚ğAì¬‚µ‚È‚¯‚ê‚Î0‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢B"
+        ) else (
+            goto :exit_initial
+        )
     ) else (
         goto :exit_initial 
     )
@@ -50,9 +58,13 @@ goto :loop_initial
 :exit_initial
 
 :loop_position
-    set \p position="è¨ˆæ¸¬ã—ãŸç³»ã®è¨­å®šãŒåå‡ºç®¡ãªã‚‰1ã€åœ§ç¸®æ©Ÿãªã‚‰0ã‚’æŒ‡å®šã—ã¦ãã ã•ã„ : "
+    set /p position="Œv‘ª‚µ‚½Œn‚Ìİ’è‚ª“foŠÇ‚È‚ç1‚ğAˆ³k‹@‚È‚ç0‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢ : "
     if not %position% == 1 (
-        if not %position% == 0 echo "è¨ˆæ¸¬ã—ãŸç³»ã®è¨­å®šãŒä¸æ­£ã§ã™ã€‚åå‡ºç®¡ãªã‚‰1ã€åœ§ç¸®æ©Ÿãªã‚‰0ã‚’æŒ‡å®šã—ã¦ãã ã•ã„ã€‚\n"
+        if not %position% == 0 (
+            echo "Œv‘ª‚µ‚½Œn‚Ìİ’è‚ª•s³‚Å‚·B“foŠÇ‚È‚ç1‚ğAˆ³k‹@‚È‚ç0‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢B
+        ) else (
+            goto :exit_position
+        )
     ) else (
         goto :exit_position
     )
@@ -60,10 +72,16 @@ goto :loop_position
 :exit_position
 
 :loop_initial_sp
-    set \p position_sp="é™åœ§ã‚’æ¸¬å®šã—ãŸå ´æ‰€ãŒã‚¤ãƒ³ãƒ¬ãƒƒãƒˆãªã‚‰2ã‚’ã€åœ§ç¸®æ©Ÿå†…éƒ¨ãªã‚‰1ã‚’ã€æ¸¬å®šã—ãªã‘ã‚Œã°æŒ‡å®šã—ã¦ãã ã•ã„ã€‚ : "
-    if not %position_sp% != 2 (
-        if not %position_sp% != 1 (
-            if not %position_sp% != 0 echo "é™åœ§ã‚’æ¸¬å®šã—ãŸå ´æ‰€ã®æŒ‡å®šãŒä¸æ­£ã§ã™ã€‚ã‚¤ãƒ³ãƒ¬ãƒƒãƒˆãªã‚‰2ã‚’ã€åœ§ç¸®æ©Ÿå†…éƒ¨ãªã‚‰1ã‚’ã€æ¸¬å®šã—ãªã‘ã‚Œã°æŒ‡å®šã—ã¦ãã ã•ã„ã€‚\n"
+    set /p position_sp="Ãˆ³‚ğ‘ª’è‚µ‚½êŠ‚ªƒCƒ“ƒŒƒbƒg‚È‚ç2‚ğAˆ³k‹@“à•”‚È‚ç1‚ğA‘ª’è‚µ‚È‚¯‚ê‚Î0‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢ : "
+    if not %position_sp% == 2 (
+        if not %position_sp% == 1 (
+            if not %position_sp% == 0 (
+                echo "Ãˆ³‚ğ‘ª’è‚µ‚½êŠ‚Ìw’è‚ª•s³‚Å‚·BƒCƒ“ƒŒƒbƒg‚È‚ç2‚ğAˆ³k‹@“à•”‚È‚ç1‚ğA‘ª’è‚µ‚È‚¯‚ê‚Î0‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢B"
+            ) else (
+                goto :exit_position_sp
+            )
+        ) else (
+            goto :exit_position_sp
         )
     ) else (
         goto :exit_position_sp
@@ -71,101 +89,140 @@ goto :loop_position
 goto :loop_initial_sp
 :exit_position_sp
 
-input_directory_path=%home_directory_path%/%DEFAULT_DATA_DIRECTORY%/%date_name%
-output_directory_path=%home_directory_path%/%DEFAULT_SORTED_DATA_DIRECTORY%/%date_name%
+set input_directory_path=%home_directory_path%%DEFAULT_DATA_DIRECTORY%\%date_name%
+set output_directory_path=%home_directory_path%%DEFAULT_SORTED_DATA_DIRECTORY%\%date_name%
+pause
 
-rem ãƒ‡ãƒ¼ã‚¿ã‚’åˆ†å‰²
-for /f "delimis=, tokens=1-9" %%a in (%csv_file_path%) (
-    if %%d == Y (
+goto :skip
+
+rem for /l %%i in (0,1,%total_row_num%) do (
+rem     call echo %%CSV_DATA[%%i][0]%%
+rem     call echo %%CSV_DATA[%%i][1]%%
+rem     call echo %%CSV_DATA[%%i][2]%%
+rem     call echo %%CSV_DATA[%%i][3]%%
+rem     call echo %%CSV_DATA[%%i][4]%%
+rem     call echo %%CSV_DATA[%%i][5]%%
+rem     call echo %%CSV_DATA[%%i][6]%%
+rem )
+
+rem ƒf[ƒ^‚ğ•ªŠ„
+pause
+for /l %%i in (0,1,%total_row_num%) do (
+    set fn=!!CSV_DATA[%%i][1]!!
+    set is_skip=!!CSV_DATA[%%i][2]!!
+    if !!CSV_DATA[%%i][3]!! == Y (
         set /a is_initial=1
     ) else (
         set /a is_initial=0
     )
-    
-    rem Skipã™ã‚‹è¡Œä»¥å¤–ã‚’åˆ†å‰²
-    if not %%c==Y (
-        sort.exe %%b %is_initial% %input_directory_path% %output_directory_path% 0 0
-        if %ERRORLEVEL% equ 1 (
-            echo "%b%ã®åˆ†å‰²ã«å¤±æ•—ã—ã¾ã—ãŸã€‚"
-            exit
-        )
+    rem Skip‚·‚ésˆÈŠO‚ğì¬
+    if not !is_skip! == Y (
+        sort.exe !fn! !is_initial! %input_directory_path% %output_directory_path% 0 0
+        rem if %ERRORLEVEL% == 0 (
+        rem     echo %fn%‚Ì•ªŠ„‚É¸”s‚µ‚Ü‚µ‚½B
+        rem     exit
+        rem )
     )
 )
 
-initial_directory_path=%home_directory_path%/%DEFAULT_INITIAL_DIRECTORY%/%date_name%
-result_directory_path=%home_directory_path%/%DEFAULT_RESULT_DIRECTORY%/%date_name%
-batch_directory_path=%home_directory_path%/%DEFAULT_BATCH_DIRECTORY%/%date_name%
+:skip
+pause
+rem for %%i in (%output_directory_path%/*.DAT) do (
+rem     for /d %%j in (%output_directory_path%/) do (copy %output_directory_path%/%%i %%j)
+rem )
+for /d %%i in (%output_directory_path%\*) do (
+    copy %output_directory_path%\*.DAT %%i
+) 
 
-rem ãƒãƒƒãƒã‚’ä½œæˆ
-set \a under_experiment=0
-for /f "delimis=, tokens=1-9" %%a in (%csv_file_path%) (
-    rem Dè¡ŒãŒYã‹ã©ã†ã‹ã§ã‚¤ãƒ‹ã‚·ãƒ£ãƒ«ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã©ã†ã‹ã‚’åˆ¤å®š
-    if %%d == Y (
-        set /a is_initial=1
-    ) else (
-        set /a is_initial=0
-    )
+set initial_directory_path=%home_directory_path%%DEFAULT_INITIAL_DIRECTORY%\%date_name%
+set result_directory_path=%home_directory_path%%DEFAULT_RESULT_DIRECTORY%\%date_name%
+set batch_directory_path=%home_directory_path%%DEFAULT_BATCH_DIRECTORY%\%date_name%
+
+rem ƒoƒbƒ`‚ğì¬
+set /a record_cnt=0
+set /a init_cnt=0
+rem ÀŒ±’†‚©‚Ç‚¤‚© ÀŒ±ŠJn‚ÌƒCƒjƒVƒƒƒ‹ƒtƒ@ƒCƒ‹‚ğ–³‹‚·‚é‚½‚ß‚Éİ’è
+set /a under_experiment=0
+pause
+for /l %%i in (0,1,%total_row_num%) do (
+    pause
     
-    rem Bè¡ŒãŒ0ã‹ã©ã†ã‹ã§ãƒ¬ã‚³ãƒ¼ãƒ‰ã—ã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤å®š
-    if %%b == 0 (
+    rem Bs‚ª0‚©‚Ç‚¤‚©‚ÅƒŒƒR[ƒh‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğ”»’è
+    if !!CSV_DATA[%%i][1]!! == 0 (
         set /a is_record=0
     ) else (
         set /a is_record=1
     )
+
+    rem Cs‚ªY‚©‚Ç‚¤‚©‚ÅƒXƒLƒbƒv‚·‚é‚©‚Ç‚¤‚©‚ğ”»’è
+    if !!CSV_DATA[%%i][2]!! == Y (
+        set /a is_skip=1
+    ) else (
+        set /a is_skip=0
+    )
     
-    rem ã‚¤ãƒ‹ã‚·ãƒ£ãƒ«ã‹ã¤ãƒ¬ã‚³ãƒ¼ãƒ‰ã—ã¦ã„ãŸã‚‰å®Ÿé¨“ä¸­ã‹ã©ã†ã‹ã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹
-    if %is_initial% equ 1 (
-        if %is_record% equ 1 (
-            if %under_experiment% equ 0 (
-                set \a under_experiment=0
+    rem Ds‚ªY‚©‚Ç‚¤‚©‚ÅƒCƒjƒVƒƒƒ‹ƒtƒ@ƒCƒ‹‚©‚Ç‚¤‚©‚ğ”»’è
+    if !!CSV_DATA[%%i][3]!! == Y (
+        set /a is_initial=1
+    ) else (
+        set /a is_initial=0
+    )
+
+    if !is_initial! equ 1 (
+        if !is_record! equ 1 (
+            rem ÀŒ±ŠJn‚ÌƒCƒjƒVƒƒƒ‹‚È‚Ì‚Åƒoƒbƒ`‚Íì¬‚µ‚È‚¢
+            if not !under_experiment! equ 0 (
+                rem ƒŒƒR[ƒh‚ª–³‚¢‚È‚çƒoƒbƒ`‚Íì¬‚µ‚È‚¢
+                if not !record_cnt! equ 0 (
+                    for /l %%j in (0,1,!init_cnt!) do (
+                        set fn=!!CSV_DATA[%%i][1]!!
+                        if %%j equ !init_cnt! (
+                            set after_P = !!CSV_DATA[%%i][4]!!
+                            set after_T = !!CSV_DATA[%%i][5]!!
+                        ) else (
+                            set /a after_init_cnt=%%j+1
+                            set after_P = !!before_Ps[%after_init_cnt%][4]!!
+                            set after_T = !!before_Ts[%after_init_cnt%][5]!!
+                        )
+                        for /l %%k in (0,1,!record_cnt!) do (
+                            make_bat.exe !!RECORD_IDS[%%j][%%k]!! %before_init_record_id% !!CSV_DATA[%%i][1]!! 1 100 %input_directory_path% %result_directory_path% %batch_directory_path% %initial_directory_path% !!before_Ps[%%j]!! !after_P! !!before_T[%%j]!! !after_T! !!Nrevs[%%j]!! %make_initial%  %position%  %position_sp%
+                            rem if %ERRORLEVEL% equ 1 (
+                            rem     echo "!!RECORD_IDS[%%j][%%k]!!‚Ìƒoƒbƒ`ì¬‚É¸”s‚µ‚Ü‚µ‚½AE
+                            rem     pause
+                            rem     exit
+                            rem )
+                        )
+                    )
+                    set /a init_cnt=0
+                    set /a record_cnt=0
+                )
             ) else (
-                set \a under_experiment=1
+                rem ÀŒ±ŠJn‚ÌƒCƒjƒVƒƒƒ‹‚ªæ‚ê‚½‚Ì‚ÅÀŒ±ŠJn
+                set /a under_experiment=1
+            )
+            rem ŠJnƒCƒjƒVƒƒƒ‹‚ğ•Û‘¶
+            set before_init_record_id=!!CSV_DATA[%%i][1]!!
+        ) else (
+            rem ƒCƒjƒVƒƒƒ‹ƒJƒEƒ“ƒg‚ğƒCƒ“ƒNƒŠƒƒ“ƒg
+            set /a init_cnt+=1
+        )
+        rem ƒCƒjƒVƒƒƒ‹æ“¾“_‚Ìˆ³—Í‚Æ‰·“x‚Æ‰ñ“]”‚ğæ“¾
+        set before_Ps[!init_cnt!]=!!CSV_DATA[%%i][4]!!
+        set before_Ts[!init_cnt!]=!!CSV_DATA[%%i][5]!!
+        set Nrevs[!init_cnt!]=!!CSV_DATA[%%i][6]!!
+    ) else (
+        rem ƒXƒLƒbƒv‚·‚é‚È‚çƒoƒbƒ`‚ğì¬‚µ‚È‚¢
+        if not !is_skip! equ 1 (
+            rem ƒŒƒR[ƒh‚·‚é‚È‚çRECORD_IDS‚É•Û‘¶
+            if !is_record! equ 1 (
+                set RECORD_IDS[!init_cnt!][!record_cnt!]=!!CSV_DATA[%%i][1]!!
+                set /a record_cnt+=1
             )
         )
     )
-    
-    if %is_record% equ 1 (
-    )
-    
-    rem 
-    if %under_experiment% equ 0 (
-        set \a before_P=%%e
-        set \a before_T=%%f
-        set \a Nrev=%%g
-        set \a before_init_no=%%h
-        set \a under_experiment=1
-    ) else (
-        if %is_initial% equ 1 (
-            set \a before_P=%%e
-            set \a before_T=%%f
-            set \a Nrev=%%g
-        )
-    )
-    
-    rem Skipã™ã‚‹è¡Œä»¥å¤–ã‚’åˆ†å‰²
-    if not %%c==Y (
-        sort.exe %%b %is_initial% %input_directory_path% %output_directory_path% 0 0
-        if %ERRORLEVEL% equ 1 (
-            echo "%b%ã®åˆ†å‰²ã«å¤±æ•—ã—ã¾ã—ãŸã€‚"
-            exit
-        )
-    )
 )
-for (int i = 0; i <= TOTAL_ROW_NUM; i++){
-    fn = (int)csv_data[i][ID_COL-2];
-    is_skip = (int)csv_data[i][SKIP_COL-2];
-    is_initial = (int)csv_data[i][INITIAL_COL-2];
-    before_init = (int)csv_data[i][BEFORE_INI_COL-2];
-    after_init = (int)csv_data[i][AFTER_INI_COL-2];
-    before_P = csv_data[before_init][P_COL-2];
-    after_P = csv_data[after_init][P_COL-2];
-    before_T = csv_data[before_init][T_COL-2];
-    after_T = csv_data[after_init][T_COL-2];
 
-    ch_num1 = 0;
-    ch_num2 = 0;
-    if (make_bat(fn, before_init, after_init, 1, 100, input_directory_path, result_directory_path, batch_directory_path, initial_directory_path, before_P, after_P, before_T, after_T, Nrev, make_initial, position, position_sp)) {
-        sprintf(comment, "%dã®ãƒãƒƒãƒãƒ•ã‚¡ã‚¤ãƒ«ä½œæˆã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n", fn);
-        exit_with_error(comment);
-    }
-}
+rem ‘Sƒoƒbƒ`‚ğ”ñ“¯Šú‚ÅÀs
+for %%i in (%batch_directory_path%\*.bat) do %%i
+endlocal
+exit
