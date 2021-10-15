@@ -1,4 +1,4 @@
-@echo on
+@echo off
 setlocal EnableDelayedExpansion
 cd /d %~dp0
 
@@ -76,7 +76,7 @@ goto :loop_position
     if not %position_sp% == 2 (
         if not %position_sp% == 1 (
             if not %position_sp% == 0 (
-                echo "静圧を測定した場所の指定が不正です。インレットなら2を、圧縮機内部なら1を、測定しなければ0を指定してください。"
+                echo "静圧を測定した場所の指定が不正です。インレットなら2を、圧縮機内部なら0を、測定しなければ1を指定してください。"
             ) else (
                 goto :exit_position_sp
             )
@@ -90,8 +90,9 @@ goto :loop_initial_sp
 :exit_position_sp
 
 set input_directory_path=%home_directory_path%%DEFAULT_DATA_DIRECTORY%\%date_name%
+mkdir %input_directory_path%
 set output_directory_path=%home_directory_path%%DEFAULT_SORTED_DATA_DIRECTORY%\%date_name%
-pause
+mkdir %output_directory_path%
 
 goto :skip
 
@@ -106,7 +107,6 @@ rem     call echo %%CSV_DATA[%%i][6]%%
 rem )
 
 rem データを分割
-pause
 for /l %%i in (0,1,%total_row_num%) do (
     set fn=!!CSV_DATA[%%i][1]!!
     set is_skip=!!CSV_DATA[%%i][2]!!
@@ -126,7 +126,6 @@ for /l %%i in (0,1,%total_row_num%) do (
 )
 
 :skip
-pause
 rem for %%i in (%output_directory_path%/*.DAT) do (
 rem     for /d %%j in (%output_directory_path%/) do (copy %output_directory_path%/%%i %%j)
 rem )
@@ -135,17 +134,18 @@ for /d %%i in (%output_directory_path%\*) do (
 ) 
 
 set initial_directory_path=%home_directory_path%%DEFAULT_INITIAL_DIRECTORY%\%date_name%
+mkdir %initial_directory_path%
 set result_directory_path=%home_directory_path%%DEFAULT_RESULT_DIRECTORY%\%date_name%
+mkdir %result_directory_path%
 set batch_directory_path=%home_directory_path%%DEFAULT_BATCH_DIRECTORY%\%date_name%
+mkdir %batch_directory_path%
 
 rem バッチを作成
 set /a record_cnt=0
 set /a init_cnt=0
 rem 実験中かどうか 実験開始時のイニシャルファイルを無視するために設定
 set /a under_experiment=0
-pause
 for /l %%i in (0,1,%total_row_num%) do (
-    pause
     
     rem B行が0かどうかでレコードしているかどうかを判定
     if !!CSV_DATA[%%i][1]!! == 0 (
@@ -177,15 +177,21 @@ for /l %%i in (0,1,%total_row_num%) do (
                     for /l %%j in (0,1,!init_cnt!) do (
                         set fn=!!CSV_DATA[%%i][1]!!
                         if %%j equ !init_cnt! (
-                            set after_P = !!CSV_DATA[%%i][4]!!
-                            set after_T = !!CSV_DATA[%%i][5]!!
+                            set after_P=!!CSV_DATA[%%i][4]!!
+                            set after_T=!!CSV_DATA[%%i][5]!!
                         ) else (
                             set /a after_init_cnt=%%j+1
-                            set after_P = !!before_Ps[%after_init_cnt%][4]!!
-                            set after_T = !!before_Ts[%after_init_cnt%][5]!!
+                            set after_P=!!before_Ps[%after_init_cnt%]!!
+                            set after_T=!!before_Ts[%after_init_cnt%]!!
                         )
-                        for /l %%k in (0,1,!record_cnt!) do (
-                            make_bat.exe !!RECORD_IDS[%%j][%%k]!! %before_init_record_id% !!CSV_DATA[%%i][1]!! 1 100 %input_directory_path% %result_directory_path% %batch_directory_path% %initial_directory_path% !!before_Ps[%%j]!! !after_P! !!before_T[%%j]!! !after_T! !!Nrevs[%%j]!! %make_initial%  %position%  %position_sp%
+                        for /l %%k in (0,1,!record_cnt!-1) do (
+                            set record_id=!!RECORD_IDS[%%j][%%k]!!
+                            set after_init_record_id=!!CSV_DATA[%%i][1]!!
+                            set before_P=!!before_Ps[%%j]!!
+                            set before_T=!!before_Ts[%%j]!!
+                            set Nrev=!!Nrevs[%%j]!!
+                            start make_bat.exe !record_id! !before_init_record_id! !after_init_record_id! 1 100 %input_directory_path% %result_directory_path% %batch_directory_path% %initial_directory_path% !before_P! !after_P! !before_T! !after_T! !Nrev! %make_initial% %position% %position_sp%
+                            rem make_bat.exe 2 1 23 1 100 ..\DAT\210701 ..\result\210701 ..\bat\210701 ..\initial\210701 760.0 761.0 20.0 21.0 200.0 1 0 1
                             rem if %ERRORLEVEL% equ 1 (
                             rem     echo "!!RECORD_IDS[%%j][%%k]!!のバッチ作成に失敗しました、E
                             rem     pause
@@ -223,6 +229,6 @@ for /l %%i in (0,1,%total_row_num%) do (
 )
 
 rem 全バッチを非同期で実行
-for %%i in (%batch_directory_path%\*.bat) do %%i
+for %%i in (%batch_directory_path%\*.bat) do start %%i
 endlocal
 exit
