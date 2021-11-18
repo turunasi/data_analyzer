@@ -9,7 +9,7 @@ set DEFAULT_RESULT_DIRECTORY=result
 set DEFAULT_BATCH_DIRECTORY=bat
 
 echo "CSVファイルをExcellで開いたままにすると読み込まれません。うんち!!"
-set /p csv_file_path="CSVファイルのパスを入力してください : "
+set /p csv_file_path="CSVファイルのパスを入力してください ex) ..\csv\211110.csv : "
 if not exist %csv_file_path% (
     echo CSVデータの取得に失敗しました。
     pause
@@ -34,7 +34,7 @@ for /f "skip=1 delims=, tokens=1-7" %%a in (%csv_file_path%) do (
 :exit_csv
 set /a total_row_num-=1
 
-set /p home_directory_path="データが纏められているディレクトリのパスを入力してください ex) 21Axial/21data : "
+set /p home_directory_path="データが纏められているディレクトリのパスを入力してください ex) 21Axial\21data\ : "
 if not exist %home_directory_path% (
     echo "ディレクトリの取得に失敗しました...\n"
     pause
@@ -72,7 +72,7 @@ goto :loop_position
 :exit_position
 
 :loop_initial_sp
-    set /p position_sp="静圧を測定した場所がインレットなら2を、圧縮機内部なら1を、測定しなければ0を指定してください : "
+    set /p position_sp="静圧を測定した場所がインレットなら2を、圧縮機内部なら0を、測定しなければ1を指定してください: "
     if not %position_sp% == 2 (
         if not %position_sp% == 1 (
             if not %position_sp% == 0 (
@@ -90,21 +90,16 @@ goto :loop_initial_sp
 :exit_position_sp
 
 set input_directory_path=%home_directory_path%%DEFAULT_DATA_DIRECTORY%\%date_name%
-mkdir %input_directory_path%
-set output_directory_path=%home_directory_path%%DEFAULT_SORTED_DATA_DIRECTORY%\%date_name%
-mkdir %output_directory_path%
-
-goto :skip
-
-rem for /l %%i in (0,1,%total_row_num%) do (
-rem     call echo %%CSV_DATA[%%i][0]%%
-rem     call echo %%CSV_DATA[%%i][1]%%
-rem     call echo %%CSV_DATA[%%i][2]%%
-rem     call echo %%CSV_DATA[%%i][3]%%
-rem     call echo %%CSV_DATA[%%i][4]%%
-rem     call echo %%CSV_DATA[%%i][5]%%
-rem     call echo %%CSV_DATA[%%i][6]%%
-rem )
+if not exist %input_directory_path% mkdir %input_directory_path%
+rem set output_directory_path=%home_directory_path%%DEFAULT_SORTED_DATA_DIRECTORY%\%date_name%
+set output_directory_path=Y:\Axial21\DAT2\211110
+if not exist %output_directory_path% mkdir %output_directory_path%
+set initial_directory_path=%home_directory_path%%DEFAULT_INITIAL_DIRECTORY%\%date_name%
+if not exist %initial_directory_path% mkdir %initial_directory_path%
+set result_directory_path=%home_directory_path%%DEFAULT_RESULT_DIRECTORY%\%date_name%
+if not exist %result_directory_path% mkdir %result_directory_path%
+set batch_directory_path=%home_directory_path%%DEFAULT_BATCH_DIRECTORY%\%date_name%
+if not exist %batch_directory_path% mkdir %batch_directory_path%
 
 rem データを分割
 for /l %%i in (0,1,%total_row_num%) do (
@@ -117,28 +112,24 @@ for /l %%i in (0,1,%total_row_num%) do (
     )
     rem Skipする行以外を作成
     if not !is_skip! == Y (
-        sort.exe !fn! !is_initial! %input_directory_path% %output_directory_path% 0 0
-        rem if %ERRORLEVEL% == 0 (
-        rem     echo %fn%の分割に失敗しました。
-        rem     exit
-        rem )
+        if not !fn! == 0 (
+            sort.exe !fn! !is_initial! %input_directory_path% %output_directory_path% 0 0
+            if %ERRORLEVEL% == 1 (
+                echo %fn%の分割に失敗しました。
+                exit
+            )
+        )
     )
 )
 
-:skip
 rem for %%i in (%output_directory_path%/*.DAT) do (
 rem     for /d %%j in (%output_directory_path%/) do (copy %output_directory_path%/%%i %%j)
 rem )
 for /d %%i in (%output_directory_path%\*) do (
     copy %output_directory_path%\*.DAT %%i
 ) 
-
-set initial_directory_path=%home_directory_path%%DEFAULT_INITIAL_DIRECTORY%\%date_name%
-mkdir %initial_directory_path%
-set result_directory_path=%home_directory_path%%DEFAULT_RESULT_DIRECTORY%\%date_name%
-mkdir %result_directory_path%
-set batch_directory_path=%home_directory_path%%DEFAULT_BATCH_DIRECTORY%\%date_name%
-mkdir %batch_directory_path%
+goto :end
+:skip
 
 rem バッチを作成
 set /a record_cnt=0
@@ -190,13 +181,13 @@ for /l %%i in (0,1,%total_row_num%) do (
                             set before_P=!!before_Ps[%%j]!!
                             set before_T=!!before_Ts[%%j]!!
                             set Nrev=!!Nrevs[%%j]!!
-                            start make_bat.exe !record_id! !before_init_record_id! !after_init_record_id! 1 100 %input_directory_path% %result_directory_path% %batch_directory_path% %initial_directory_path% !before_P! !after_P! !before_T! !after_T! !Nrev! %make_initial% %position% %position_sp%
-                            rem make_bat.exe 2 1 23 1 100 ..\DAT\210701 ..\result\210701 ..\bat\210701 ..\initial\210701 760.0 761.0 20.0 21.0 200.0 1 0 1
-                            rem if %ERRORLEVEL% equ 1 (
-                            rem     echo "!!RECORD_IDS[%%j][%%k]!!のバッチ作成に失敗しました、E
-                            rem     pause
-                            rem     exit
-                            rem )
+                            start make_bat.exe !record_id! !before_init_record_id! !after_init_record_id! 1 500 %output_directory_path% %result_directory_path% %batch_directory_path% %initial_directory_path% !before_P! !after_P! !before_T! !after_T! !Nrev! %make_initial% %position% %position_sp%
+                          
+                            if %ERRORLEVEL% equ 1 (
+                                echo "!!RECORD_IDS[%%j][%%k]!!のバッチ作成に失敗しました、E
+                                pause
+                                exit
+                            )
                         )
                     )
                     set /a init_cnt=0
@@ -229,6 +220,7 @@ for /l %%i in (0,1,%total_row_num%) do (
 )
 
 rem 全バッチを非同期で実行
-for %%i in (%batch_directory_path%\*.bat) do start %%i
+rem for %%i in (%batch_directory_path%\*.bat) do %%i
+:end
 endlocal
 exit
